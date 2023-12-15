@@ -53,6 +53,7 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     
     path("api/user/", include("users.urls", namespace="users")),
+    path("api/products/", include("products.urls", namespace="products")),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
