@@ -1,17 +1,12 @@
-import datetime
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.utils import timezone
-from django.utils.crypto import get_random_string
 from django.utils.translation import gettext as _
 from django_countries.fields import CountryField
-# from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework.exceptions import NotAcceptable
-# from twilio.base.exceptions import TwilioRestException
-# from twilio.rest import Client
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Initiallize user models to Django'es default User models
 User = get_user_model()
@@ -57,4 +52,7 @@ class UserAddress(models.Model):
         ordering = ("-created_at",)
 
     def __str__(self):
+        return self.user.get_full_name()
+    
+    def __repr__(self):
         return self.user.get_full_name()
