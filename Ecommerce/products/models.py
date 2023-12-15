@@ -26,7 +26,6 @@ def product_image_path(instance, filename):
 
 class Category(TimestampedModel):
     name = models.CharField(_("Category name"), max_length=100)
-    icon = models.ImageField(upload_to=category_image_path, blank=True)
     
     class Meta:
         verbose_name = _("Product Category")

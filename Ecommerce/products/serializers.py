@@ -24,7 +24,7 @@ class ProductWriteSerializer(serializers.ModelSerializer):
     """ This serializer uses for create or update products"""
     
     seller = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    category = CategorySerializer()
+    category = serializers.CharField()
 
     class Meta:
         model = Product
@@ -40,16 +40,14 @@ class ProductWriteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         category = validated_data.pop("category")
-        instance, created = Category.objects.get_or_create(**category)
+        instance, created = Category.objects.get_or_create(name__iexact=category)
         product = Product.objects.create(**validated_data, category=instance)
 
         return product
 
     def update(self, instance, validated_data):
-        if "category" in validated_data:
-            nested_serializer = self.fields["category"]
-            nested_instance = instance.category
-            nested_data = validated_data.pop("category")
-            nested_serializer.update(nested_instance, nested_data)
+        category = validated_data.pop("category")
+        category_obj, created = Category.objects.get_or_create(name__iexact=category)
+        validated_data['category'] = category_obj
 
         return super(ProductWriteSerializer, self).update(instance, validated_data)
