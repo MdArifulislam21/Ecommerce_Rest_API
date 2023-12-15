@@ -48,13 +48,15 @@ class ProfileAPIView(RetrieveUpdateAPIView):
     """
     Get, Update user profile
     """
-
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsProfileOwner,)
 
     def get_object(self):
-        return self.request.user.profile
+        try:
+            return self.request.user.profile
+        except:
+            return Profile.objects.get_or_create(user=self.request.user)
 
 
 class UserAPIView(RetrieveAPIView):

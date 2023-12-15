@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'rest_framework',
     "rest_framework.authtoken",
     "dj_rest_auth",
+    "allauth",
+    # "allauth.account",
+    # "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "dj_rest_auth.registration",
     "users",
@@ -84,6 +87,27 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    # 'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=30),
+    # 'SLIDING_TOKEN_LIFETIME': timedelta(days=1),
+    # 'ROTATE_REFRESH_TOKENS': False,
+    # 'ALGORITHM': 'HS256',  # <-- Ensure this is a string value
+    # 'SIGNING_KEY': None,
+    # 'VERIFYING_KEY': None,
+    # 'AUTH_HEADER_TYPES': ('Bearer',),
+    # 'USER_ID_FIELD': 'id',
+    # 'USER_ID_CLAIM': 'user_id',
+    # 'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+    # 'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    # 'TOKEN_TYPE_CLAIM': 'token_type',
+    # 'JTI_CLAIM': 'jti',
+    # 'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    # 'SLIDING_TOKEN_EXP_CLAIM': 'exp',
+    # 'SLIDING_TOKEN_IAT_CLAIM': 'iat',
 }
 
 # Database

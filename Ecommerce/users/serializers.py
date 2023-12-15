@@ -73,6 +73,19 @@ class UserRegistrationSerializer(serializers.Serializer):
         return user
 
 
+# class UserSerializer(serializers.ModelSerializer):
+
+#     """ Serializer class to serialize the user  model """
+
+#     class Meta:
+#         model = User
+#         fields = (
+#             "username",
+#             "email",
+#             "first_name",
+#             "last_name"
+#         )
+        
 class ProfileSerializer(serializers.ModelSerializer):
 
     """ Serializer class to serialize the user Profile model """
@@ -84,7 +97,20 @@ class ProfileSerializer(serializers.ModelSerializer):
             "bio",
             "created_at",
             "updated_at",
+            "user"
         )
+        
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        user = instance.user
+        representation["username"] =user.username
+        representation["first_name"] =user.first_name
+        representation["last_name"] =user.last_name
+        representation["email"] =user.email
+        
+
+        return representation
+        
 
 
 class AddressReadOnlySerializer(CountryFieldMixin, serializers.ModelSerializer):
@@ -94,6 +120,7 @@ class AddressReadOnlySerializer(CountryFieldMixin, serializers.ModelSerializer):
     class Meta:
         model = UserAddress
         fields = "__all__"
+        
 
 
 class UserSerializer(serializers.ModelSerializer):
