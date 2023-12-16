@@ -30,7 +30,7 @@ class UserRegisterationAPIView(CreateAPIView):
     """
 
     serializer_class = UserRegistrationSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.all().prefetch_related("profile")
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -43,12 +43,11 @@ class UserRegisterationAPIView(CreateAPIView):
 
 
 
-
 class ProfileAPIView(RetrieveUpdateAPIView):
     """
     Get, Update user profile
     """
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.all().select_related("user")
     serializer_class = ProfileSerializer
     permission_classes = (IsProfileOwner,)
 

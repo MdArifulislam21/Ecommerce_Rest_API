@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from Products.models import TimestampedModel
+from products.models import TimestampedModel
 from orders.models import Order
 
 

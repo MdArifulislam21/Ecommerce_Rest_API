@@ -20,7 +20,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
     CRUD order items that are associated with the current order id.
     """
 
-    queryset = OrderItem.objects.all()
+    queryset = OrderItem.objects.all().select_related("product", "order")
     serializer_class = OrderItemSerializer
     permission_classes = [IsOrderItemByBuyer]
 
@@ -45,7 +45,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     CRUD orders of a user
     """
 
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().select_related("buyer","shipping_address","billing_address").prefetch_related("order_items")
     permission_classes = [IsOrderByBuyer]
 
     def get_serializer_class(self):

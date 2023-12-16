@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
+from django.db import transaction
 
 from orders.models import Order, OrderItem
 
@@ -103,11 +104,27 @@ class OrderWriteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         orders_data = validated_data.pop("order_items")
-        order = Order.objects.create(**validated_data)
+        
+        try:
+            with transaction.atomic():
+                order = Order.objects.create(**validated_data)
 
-        for order_data in orders_data:
-            OrderItem.objects.create(order=order, **order_data)
-
+                for order_data in orders_data:
+                    product = order_data.get('product')
+                    quantity = order_data.get('quantity')
+                    if product.quantity > quantity:
+                        product.quantity -= quantity
+                        product.save()
+                    else:
+                        raise serializers.ValidationError( _("Product doesn't have enough quantity"))
+                    OrderItem.objects.create(order=order, **order_data)
+            transaction.commit()
+        
+        except Exception as e:
+            # If an exception occurs, roll back the changes
+            
+            transaction.rollback()
+            
         return order
 
     def update(self, instance, validated_data):
@@ -117,8 +134,20 @@ class OrderWriteSerializer(serializers.ModelSerializer):
         if order_items:
             for order_item in order_items:
                 item = instance_order_items.pop(0)
-                item.product = order_item.get("product", item.product)
-                item.quantity = order_item.get("quantity", item.quantity)
+                product = order_item.get("product", item.product)
+                quantity = order_item.get("quantity", item.quantity)
+                
+                if order_item.get("quantity"):
+                    
+                    """ Check if product has enought quantity in stock """
+                    
+                    if product.quantity < quantity - item.quantity:
+                        raise serializers.ValidationError( _("Product doesn't have enough quantity"))
+                    
+                    product.quantity -= quantity - item.quantity
+                    
+                item.product = product 
+                item.quantity = quantity
                 item.save()
 
         return instance

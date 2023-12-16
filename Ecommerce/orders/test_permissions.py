@@ -95,7 +95,7 @@ class IsOrderItemByBuyerTests(TestCase):
             seller=self.user1
         )
         self.order = Order.objects.create(buyer=self.user1, status=Order.PENDING)
-        self.order_item = OrderItem.objects.create(order=self.order, product=self.product)
+        self.order_item = OrderItem.objects.create(order=self.order, quantity=1, product=self.product)
 
     def test_unauthorized_access(self):
 

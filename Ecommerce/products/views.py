@@ -21,7 +21,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
 
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().select_related("category")
 
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update", "destroy"):
