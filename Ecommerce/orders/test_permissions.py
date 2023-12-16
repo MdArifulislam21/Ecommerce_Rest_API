@@ -10,13 +10,18 @@ from products.models import Category, Product
 
 
 class IsOrderPendingTests(TestCase):
+    """"
+    This test checks if orderitem can be updated or deleted , when it is in pending state.
+    And when it is completed state.
+    """
+    
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.order = Order.objects.create(buyer=self.user, status="P")
         self.order1 = Order.objects.create(buyer=self.user, status="C")
 
     def test_update_non_pending_order(self):
-        
+
         request = APIRequestFactory().put("/orders/1/", data={})
         request.user = self.user
 
@@ -46,6 +51,9 @@ class IsOrderPendingTests(TestCase):
 
 
 class IsOrderByBuyerTests(TestCase):
+    """
+    This testcase check access of orders buyer.
+    """
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.user2 = User.objects.create_user(username='testuser2', password='testpassword')
@@ -70,6 +78,9 @@ class IsOrderByBuyerTests(TestCase):
 
 
 class IsOrderItemByBuyerTests(TestCase):
+    """
+    This testcase check access of order items buyer.
+    """
     def setUp(self):
         self.user1 = User.objects.create_user(username='testuser1', password='testpassword')
         self.user2 = User.objects.create_user(username='testuser2', password='testpassword')
@@ -95,7 +106,6 @@ class IsOrderItemByBuyerTests(TestCase):
         self.assertFalse(permission.has_object_permission(request, None, self.order_item))
 
     def test_authorized_access(self):
-      
         request = APIRequestFactory().get("/orders/1/items/1/")
         request.user = self.user1
 
