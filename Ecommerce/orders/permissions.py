@@ -1,6 +1,13 @@
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import BasePermission
+from django.test import TestCase
+from django.contrib.auth.models import User
+from rest_framework.test import APIRequestFactory
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .models import Order, OrderItem
+from rest_framework import permissions
 
 from orders.models import Order
 
@@ -13,7 +20,10 @@ class IsOrderPending(BasePermission):
     message = _("Updating or deleting closed order is not allowed.")
 
     def has_object_permission(self, request, view, obj):
-        if view.action in ("retrieve",):
+        # if view.action in ("retrieve",):
+        #     return True
+        if request.method in permissions.SAFE_METHODS:
+            # Permission logic for retrieve action
             return True
         return obj.status == "P"
 
@@ -63,6 +73,10 @@ class IsOrderItemPending(BasePermission):
         return order.status == "P"
 
     def has_object_permission(self, request, view, obj):
-        if view.action in ("retrieve",):
+        # if view.action in ("retrieve",):
+        if request.method in permissions.SAFE_METHODS:
             return True
         return obj.order.status == "P"
+
+
+

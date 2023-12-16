@@ -3,8 +3,8 @@ from rest_framework import viewsets
 
 from orders.models import Order, OrderItem
 from orders.permissions import (
-    IsOrderByBuyerOrAdmin,
-    IsOrderItemByBuyerOrAdmin,
+    IsOrderByBuyer,
+    IsOrderItemByBuyer,
     IsOrderItemPending,
     IsOrderPending,
 )
@@ -22,7 +22,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-    permission_classes = [IsOrderItemByBuyerOrAdmin]
+    permission_classes = [IsOrderItemByBuyer]
 
     def get_queryset(self):
         res = super().get_queryset()
@@ -46,7 +46,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Order.objects.all()
-    permission_classes = [IsOrderByBuyerOrAdmin]
+    permission_classes = [IsOrderByBuyer]
 
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update", "destroy"):

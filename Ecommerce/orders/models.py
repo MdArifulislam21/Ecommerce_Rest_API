@@ -55,7 +55,7 @@ class OrderItem(TimestampedModel):
     product = models.ForeignKey(
         Product, related_name="product_orders", on_delete=models.CASCADE
     )
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=1)
 
 
     class Meta:
@@ -67,6 +67,6 @@ class OrderItem(TimestampedModel):
     @cached_property
     def cost(self):
         """
-        Total cost of the ordered item
+        Round value of Total cost of the ordered item
         """
         return round(self.quantity * self.product.price, 2)
