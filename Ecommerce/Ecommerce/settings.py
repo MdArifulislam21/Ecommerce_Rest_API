@@ -45,13 +45,17 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.socialaccount.providers.google",
     "dj_rest_auth.registration",
-    "drf_yasg",
-    
+    # "drf_yasg",
+
+
+
+    'drf_spectacular',
+
     "users",
     "products",
     "orders",
     "payment",
-    
+
 ]
 
 MIDDLEWARE = [
@@ -71,7 +75,7 @@ ROOT_URLCONF = 'Ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,7 +95,8 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
@@ -140,6 +145,14 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+# DRF Spectacular
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Ecommerce API",
+    "DESCRIPTION": "An Ecommerce API built using Django Rest Framework",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
