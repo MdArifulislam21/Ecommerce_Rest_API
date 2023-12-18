@@ -75,17 +75,7 @@ class UserRegistrationSerializer(serializers.Serializer):
 
 # class UserSerializer(serializers.ModelSerializer):
 
-#     """ Serializer class to serialize the user  model """
-
-#     class Meta:
-#         model = User
-#         fields = (
-#             "username",
-#             "email",
-#             "first_name",
-#             "last_name"
-#         )
-        
+       
 class ProfileSerializer(serializers.ModelSerializer):
 
     """ Serializer class to serialize the user Profile model """
@@ -121,7 +111,6 @@ class AddressReadOnlySerializer(CountryFieldMixin, serializers.ModelSerializer):
         model = UserAddress
         fields = "__all__"
         
-
 
 class UserSerializer(serializers.ModelSerializer):
     """ Serializer class to seralize User model """

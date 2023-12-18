@@ -7,9 +7,6 @@ from users.serializers import BillingAddressSerializer, ShippingAddressSerialize
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    """
-    Serializer to CRUD payments for an order.
-    """
 
     buyer = serializers.CharField(source="order.buyer.get_full_name", read_only=True)
 
