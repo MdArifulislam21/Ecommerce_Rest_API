@@ -1,10 +1,9 @@
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
-from django.db import transaction
-
+from products.models import Product
 from orders.models import Order, OrderItem
-
+from django.db import transaction
 
 class OrderItemSerializer(serializers.ModelSerializer):
 
@@ -101,32 +100,30 @@ class OrderWriteSerializer(serializers.ModelSerializer):
             "updated_at",
         )
         read_only_fields = ("status",)
-
+        
+    @transaction.atomic
     def create(self, validated_data):
         orders_data = validated_data.pop("order_items")
         
-        try:
-            with transaction.atomic():
-                order = Order.objects.create(**validated_data)
 
-                for order_data in orders_data:
-                    product = order_data.get('product')
-                    quantity = order_data.get('quantity')
-                    if product.quantity > quantity:
-                        product.quantity -= quantity
-                        product.save()
-                    else:
-                        raise serializers.ValidationError( _("Product doesn't have enough quantity"))
-                    OrderItem.objects.create(order=order, **order_data)
-            transaction.commit()
+        order = Order.objects.create(**validated_data)
+        update_product_list = []
+        for order_data in orders_data:
+            product = order_data.get('product')
+            quantity = order_data.get('quantity')
+            if product.quantity > quantity:
+                product.quantity -= quantity
+                update_product_list.append(product)
+                
+            else:
+                raise serializers.ValidationError( _("Product doesn't have enough quantity"))
+            OrderItem.objects.create(order=order, **order_data)
         
-        except Exception as e:
-            # If an exception occurs, roll back the changes
-            
-            transaction.rollback()
-            
+        Product.objects.bulk_update(update_product_list, ["quantity"])
         return order
-
+    
+    
+    @transaction.atomic
     def update(self, instance, validated_data):
         order_items = validated_data.pop("order_items", None)
         instance_order_items = list((instance.order_items).all())

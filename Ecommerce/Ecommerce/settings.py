@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7^*d70q9@#(=r-aq)=p1%0%+(-6b%spq-_6b9g(q5^9&5%q4g^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["ariful2050.pythonanywhere.com", "https://ariful2050.pythonanywhere.com", "http://ariful2050.pythonanywhere.com/"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.socialaccount.providers.google",
     "dj_rest_auth.registration",
-    # "drf_yasg",
+    "drf_yasg",
 
 
 

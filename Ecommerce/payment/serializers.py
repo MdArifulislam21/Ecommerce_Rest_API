@@ -4,7 +4,7 @@ from orders.models import Order
 from payment.models import Payment
 from users.models import UserAddress
 from users.serializers import BillingAddressSerializer, ShippingAddressSerializer
-
+from django.db import transaction
 
 class PaymentSerializer(serializers.ModelSerializer):
 
@@ -63,6 +63,7 @@ class CheckoutSerializer(serializers.ModelSerializer):
             "billing_address",
         )
 
+    @transaction.atomic
     def update(self, instance, validated_data):
         order_shipping_address = None
         order_billing_address = None
