@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local development settings
+.env
+
+# Database
+db.sqlite3
+
+# Static files
+/static/
+
+# Media files
+/media/
+
+# Virtual environment
+venv
+venv/
+env/
+
+# Compiled Python files
+*.pyc
+
+# Backup files
+*.bak
+*.swp
+*~
+
+# Editor-specific files
+.vscode/
+
+# Logs
+*.log
+
+# Django generated files
+*.db
+*.sqlite3
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Ignore migration files if you are using South or Django migrations
+*.db
+*.sqlite3
+/migrations/
